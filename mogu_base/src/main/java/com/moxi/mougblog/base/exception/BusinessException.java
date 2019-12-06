@@ -1,8 +1,8 @@
 package com.moxi.mougblog.base.exception;
 
 /**
- * @Author: 陌溪
- * @Date: 2019年12月4日22:47:32
+ * @Author:byteblogs
+ * @Date:2018/09/27 12:52
  */
 public class BusinessException extends RuntimeException {
 
