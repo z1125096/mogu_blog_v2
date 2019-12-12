@@ -252,6 +252,7 @@ public class BlogRestApi {
 			blog.setArticlesPart(PROJECT_NAME);
 		} else {
 			blog.setAuthor(blogVO.getAuthor());
+			blog.setArticlesPart(blogVO.getArticlesPart());
 		}
 
 		blog.setTitle(blogVO.getTitle());
@@ -306,6 +307,7 @@ public class BlogRestApi {
 			blog.setArticlesPart(PROJECT_NAME);
 		} else {
 			blog.setAuthor(blogVO.getAuthor());
+			blog.setArticlesPart(blogVO.getArticlesPart());
 		}
 
 		blog.setTitle(blogVO.getTitle());
@@ -349,7 +351,7 @@ public class BlogRestApi {
 			System.out.println(dateTime);
 			map.put(SysConf.CREATE_TIME, dateTime);
 			//发送到RabbitMq
-			rabbitTemplate.convertAndSend("exchange.direct", "mogu.blog", map);
+			rabbitTemplate.convertAndSend(SysConf.EXCHANGE_DIRECT, SysConf.MOGU_BLOG, map);
 			
 			//删除solr索引
 			blogSearchService.deleteIndex(blog.getUid());
