@@ -32,6 +32,18 @@
 	      </template>
 	    </el-table-column>
 
+      <el-table-column label="平台" width="100">
+	      <template slot-scope="scope">
+	        <span>{{ scope.row.os }}</span>
+	      </template>
+	    </el-table-column>
+
+      <el-table-column label="浏览器" width="200">
+	      <template slot-scope="scope">
+	        <span>{{ scope.row.browser }}</span>
+	      </template>
+	    </el-table-column>
+
 	    <el-table-column label="用户行为" width="150">
 	      <template slot-scope="scope">
 	        <span>{{ scope.row.behaviorContent }}</span>
@@ -129,11 +141,16 @@ export default {
   },
   methods: {
     webVisitList: function() {
-      var params = new URLSearchParams();
-      params.append("keyword", this.keyword);      
-      params.append("startTime", this.value5);
-      params.append("currentPage", this.currentPage);
-      params.append("pageSize", this.pageSize);
+      var params = {};
+      params.keyword = this.keyword;
+      params.startTime = "";
+      if(this.value5) {
+        params.startTime = this.value5[0] + "," + this.value5[1];
+      }      
+      params.pageSize = this.pageSize;
+      params.currentPage = this.currentPage;
+
+      console.log("params", params, this.value5);
       getWebVisitList(params).then(response => {
         this.tableData = response.data.records;
         this.currentPage = response.data.current;

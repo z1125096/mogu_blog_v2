@@ -19,11 +19,11 @@
 
         <el-row class="elRow">
           <el-tooltip content="码云" placement="bottom">
-            <el-button icon="el-icon-search" circle></el-button>
+            <el-button icon="el-icon-search" circle @click="goAuth('gitee')"></el-button>
           </el-tooltip>
 
           <el-tooltip content="Github" placement="bottom">
-            <el-button type="primary" icon="el-icon-edit" circle></el-button>
+            <el-button type="primary" icon="el-icon-edit" circle @click="goAuth('github')"></el-button>
           </el-tooltip>
 
           <el-tooltip content="QQ" placement="bottom">
@@ -108,184 +108,200 @@
 </template>
 
 <script>
-import Head from "../components/Head";
-import BlogHead from "../components/BlogHead";
-import BlogFooter from "../components/BlogFooter";
-import { login, logout, register  } from "../api/user";
+  import Head from "../components/Head";
+  import BlogHead from "../components/BlogHead";
+  import BlogFooter from "../components/BlogFooter";
+  import { login, logout, register  } from "../api/user";
 
-export default {
-  name: "share",
-  data() {
-    return {
-      // 显示登录页面
-      showLogin: true,
-      isLogin: false,
-      table: false,
-      dialog: false,
-      loading: false,
-      labelPosition: "right",
-      loginForm: {
-        userName: "",
-        password: ""
+  export default {
+    name: "share",
+    data() {
+      return {
+        // 显示登录页面
+        showLogin: true,
+        isLogin: false,
+        table: false,
+        dialog: false,
+        loading: false,
+        labelPosition: "right",
+        loginForm: {
+          userName: "",
+          password: ""
+        },
+        registerForm: {
+          userName: "",
+          password: "",
+          password2: "",
+          email: ""
+        }
+      };
+    },
+    components: {
+      //注册组件
+      BlogHead,
+      BlogFooter,
+      Head
+    },
+    created() {},
+    methods: {
+      handleClose(done) {
+        if (this.loading) {
+          return;
+        }
+        this.$confirm("确定要提交表单吗？")
+          .then(_ => {
+            this.loading = true;
+            this.timer = setTimeout(() => {
+              done();
+              // 动画关闭需要一定的时间
+              setTimeout(() => {
+                this.loading = false;
+              }, 400);
+            }, 500);
+          })
+          .catch(_ => {});
       },
-      registerForm: {
-        userName: "",
-        password: "",
-        password2: "",
-        email: ""
-      }
-    };
-  },
-  components: {
-    //注册组件
-    BlogHead,
-    BlogFooter,
-    Head
-  },
-  created() {},
-  methods: {
-    handleClose(done) {
-      if (this.loading) {
-        return;
-      }
-      this.$confirm("确定要提交表单吗？")
-        .then(_ => {
-          this.loading = true;
-          this.timer = setTimeout(() => {
-            done();
-            // 动画关闭需要一定的时间
-            setTimeout(() => {
-              this.loading = false;
-            }, 400);
-          }, 500);
-        })
-        .catch(_ => {});
-    },
-    cancelForm() {
-      this.loading = false;
-      this.dialog = false;
-      clearTimeout(this.timer);
-    },
-    startLogin: function() {
-      var params = {};
-      params.userName = this.loginForm.userName;
-      params.passWord = this.loginForm.password;
-      params.isRememberMe = 0;
-      console.log("登录表单", params);
-      login(params).then(response => {
-        if (response.code == "success") {
-          console.log(response.data);
-        }
-      });
-    },
-    startRegister: function() {
-      
-      var params = {};
-      params.userName = this.registerForm.userName;
-      params.passWord = this.registerForm.password;
-      params.email = this.registerForm.email;
-      console.log("登录表单", params);
-      register(params).then(response => {
-        if (response.code == "success") {
-          console.log(response.data);
-        }
-      });
-    },
-    goLogin: function() {
-      console.log("去登录页面");
-      this.showLogin = true;
-    },
-    goRegister: function() {
-      console.log("去注册页面");
-      this.showLogin = false;
+      cancelForm() {
+        this.loading = false;
+        this.dialog = false;
+        clearTimeout(this.timer);
+      },
+      startLogin: function() {
+        var params = {};
+        params.userName = this.loginForm.userName;
+        params.passWord = this.loginForm.password;
+        params.isRememberMe = 0;
+        console.log("登录表单", params);
+        login(params).then(response => {
+          if (response.code == "success") {
+            console.log(response.data);
+          }
+        });
+      },
+      startRegister: function() {
+
+        var params = {};
+        params.userName = this.registerForm.userName;
+        params.passWord = this.registerForm.password;
+        params.email = this.registerForm.email;
+        console.log("登录表单", params);
+        register(params).then(response => {
+          if (response.code == "success") {
+            console.log(response.data);
+          }
+        });
+      },
+      goLogin: function() {
+        console.log("去登录页面");
+        this.showLogin = true;
+      },
+      goRegister: function() {
+        console.log("去注册页面");
+        this.showLogin = false;
+      },
+      goAuth: function (source) {
+        console.log("go", source)
+        var params = new URLSearchParams();
+        params.append("source", source);
+        login(params).then(response => {
+          if (response.code == "success") {
+            console.log(response.data.url);
+            var token = response.data.token;
+            console.log(response);
+            window.location.href = response.data.url
+
+            //window.open(response.data);
+          }
+        });
+        // this.$router.push({name: '/oauth/render/gitee'});
+      },
     }
-  }
-};
+  };
 </script>
 
 
 <style>
-.elTabs {
-  margin-top: 50px;
-}
-.contain {
-  width: 100%;
-  height: 100%;
-  background: yellow;
-}
-.box {
-  width: 400px;
-  height: 420px;
-  background: white;
-  position: fixed;
-  margin: auto;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 1000; /* 要比遮罩层大 */
-}
-.registerBox {
-  height: 570px;
-}
-.box .title {
-  height: 48px;
-  font-size: 22px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 48px;
-}
-.box .el-divider--horizontal {
-  margin: 12px 0;
-}
-.box .el-form-item__label {
-  margin-left: 10px;
-  font-size: 16px;
-}
-.box .el-input__inner {
-  margin-left: 10px;
-  width: 90%;
-}
-.box .btn {
-  text-align: center;
-}
-.box .loginBtn {
-  width: 40%;
-}
-.box .registerBtn {
-  width: 40%;
-}
-.elRow {
-  margin-top: 15px;
-  text-align: center;
-}
-.loginTip {
-  margin-top: 10px;
-  font-size: 14px;
-  text-align: center;
-  color: #bababa;
-}
+  .elTabs {
+    margin-top: 50px;
+  }
+  .contain {
+    width: 100%;
+    height: 100%;
+    background: yellow;
+  }
+  .box {
+    width: 400px;
+    height: 420px;
+    background: white;
+    position: fixed;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000; /* 要比遮罩层大 */
+  }
+  .registerBox {
+    height: 570px;
+  }
+  .box .title {
+    height: 48px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 48px;
+  }
+  .box .el-divider--horizontal {
+    margin: 12px 0;
+  }
+  .box .el-form-item__label {
+    margin-left: 10px;
+    font-size: 16px;
+  }
+  .box .el-input__inner {
+    margin-left: 10px;
+    width: 90%;
+  }
+  .box .btn {
+    text-align: center;
+  }
+  .box .loginBtn {
+    width: 40%;
+  }
+  .box .registerBtn {
+    width: 40%;
+  }
+  .elRow {
+    margin-top: 15px;
+    text-align: center;
+  }
+  .loginTip {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+    color: #bababa;
+  }
 
-.remarksBox {
-  position: fixed;
-  left: 50%;
-  margin-left: -100px;
-  top: 50%;
-  margin-top: -50px;
-  border: 1px solid red;
-  width: 200px;
-  height: 100px;
-  text-align: center;
-  z-index: 1000; /* 要比遮罩层大 */
-}
-/* 遮罩层 */
-.mask {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-}
+  .remarksBox {
+    position: fixed;
+    left: 50%;
+    margin-left: -100px;
+    top: 50%;
+    margin-top: -50px;
+    border: 1px solid red;
+    width: 200px;
+    height: 100px;
+    text-align: center;
+    z-index: 1000; /* 要比遮罩层大 */
+  }
+  /* 遮罩层 */
+  .mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
 </style>

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.moxi.mougblog.base.validator.annotion.NotBlank;
 import com.moxi.mougblog.base.validator.group.GetOne;
 import com.moxi.mougblog.base.validator.group.Insert;
-import com.moxi.mougblog.base.validator.group.Update;
 import com.moxi.mougblog.base.vo.BaseVO;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -84,18 +83,15 @@ public class UserVO extends BaseVO<UserVO> {
      */
     private String summary;
 
-    /**
-     * github地址
-     */
-    private String github;
 
     /**
-     * gitee地址
+     * 资料来源
      */
-    private String gitee;
+    private String source;
 
     /**
-     * 是否记住密码
+     * 平台uuid
      */
-    private Integer isRememberMe;
+    private String uuid;
+
 }

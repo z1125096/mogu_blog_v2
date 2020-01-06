@@ -1,16 +1,23 @@
 #app
 server:
-    port: 8603
+  port: 8603
 
 #阿里大于
 templateCode: SMS_XXXXXX #短信模板编号
 signName: 蘑菇博客
+PROJECT_NAME_EN: moguBlog
 
 moguBlog:
-   email: mogublog@163.com
-    
-#Data image url
+  email: mogublog@163.com
+
 data:
+  # 门户页面
+  webSite:
+    url: http://localhost:9527/#/
+  # mogu_web网址，用于第三方登录回调
+  web:
+    url: http://127.0.0.1:8603
+  # 静态资源映射，通过nginx
   image:
     url: http://localhost:8600/
 file:
@@ -26,7 +33,8 @@ BLOG:
   SECOND_COUNT: 2 #二级推荐
   THIRD_COUNT: 3 #三级推荐
   FOURTH_COUNT: 5 #四级推荐
-        
+  USER_TOKEN_SURVIVAL_TIME: 6000 # toekn令牌存活时间, 100分钟
+
 
 #spring
 spring:
@@ -41,40 +49,40 @@ spring:
   datasource:
     username: root
     password: root
-    url: jdbc:mysql://localhost:3306/mogu_blog?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useSSL=false    
+    url: jdbc:mysql://localhost:3306/mogu_blog?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useSSL=false&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    
+
     # 初始化大小，最小，最大
     initialSize: 5
     minIdle: 5
     maxActive: 50
-    
+
     #连接等待超时时间
     maxWait: 60000
-    
+
     #配置隔多久进行一次检测(检测可以关闭的空闲连接)
     timeBetweenEvictionRunsMillis: 60000
-    
+
     #配置连接在池中的最小生存时间
     minEvictableIdleTimeMillis: 300000
-    
+
     dbcp:
       remove-abandoned: true
       #泄露的连接可以被删除的超时时间（秒），该值应设置为应用程序查询可能执行的最长时间
       remove-abandoned-timeout: 180
-    
+
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false
     poolPreparedStatements: true
-    
+
     #配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
     filters: stat,wall,log4j
     maxPoolPreparedStatementPerConnectionSize: 20
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-    
+
   #Solr配置信息
   data:
     solr:
@@ -82,7 +90,7 @@ spring:
       core: collection1
       repositories:
         enabled: true
-  
+
   #redis
   redis:
     host: 127.0.0.1 #redis的主机ip
@@ -102,9 +110,9 @@ eureka:
       zone: ABC      # eureka可以理解的元数据
       lilizhou: BBC  # 不会影响客户端行为
     lease-renewal-interval-in-seconds: 5
-    
+
 # 或者：
-feign.hystrix.enabled: false ## 索性禁用feign的hystrix支持    
+feign.hystrix.enabled: false ## 索性禁用feign的hystrix支持
 
 #mybatis
 mybatis-plus:
@@ -132,3 +140,13 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
+
+# 第三方登录
+justAuth:
+  clientId:
+    gitee: bd8238be8154932860aab5b1d2594f00d5472970b6d72f83f338eecb474d6898
+    github: 4fbf8a5fe687887c2549
+  clientSecret:
+    gitee: 39f64142da6819e394b6d093984cec39d41e47eb5fd824f49fc0c24bbcbd8ec7
+    github: 7318a7bea7a5b006a97ac8e7758d130ce04e622e
+

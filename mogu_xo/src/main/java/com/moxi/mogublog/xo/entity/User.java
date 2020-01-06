@@ -1,14 +1,14 @@
 package com.moxi.mogublog.xo.entity;
 
-import java.util.Date;
-import java.util.List;
-
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.moxi.mougblog.base.entity.SuperEntity;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -33,19 +33,19 @@ public class User extends SuperEntity<User> {
      * 密码
      */
     private String passWord;
-    
+
     /**
      * 昵称
      */
     private String nickName;
-    
+
     /**
      * 性别(1:男2:女)
      */
     private String gender;
 
     /**
-     * 个人头像
+     * 个人头像(UID)
      */
     private String avatar;
 
@@ -57,7 +57,7 @@ public class User extends SuperEntity<User> {
     /**
      * 出生年月日
      */
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birthday;
 
@@ -65,22 +65,22 @@ public class User extends SuperEntity<User> {
      * 手机
      */
     private String mobile;
-    
+
     /**
      * QQ号
      */
     private String qqNumber;
-    
+
     /**
      * 微信号
      */
     private String weChat;
-    
+
     /**
      * 职业
      */
-    private String occupation;   
-    
+    private String occupation;
+
     /**
      * 自我简介最多150字
      */
@@ -92,9 +92,24 @@ public class User extends SuperEntity<User> {
     private Integer loginCount;
 
     /**
+     * 验证码
+     */
+    private String validCode;
+
+    /**
+     * 资料来源
+     */
+    private String source;
+
+    /**
+     * 平台uuid
+     */
+    private String uuid;
+
+    /**
      * 最后登录时间
      */
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastLoginTime;
 
@@ -102,20 +117,14 @@ public class User extends SuperEntity<User> {
      * 最后登录IP
      */
     private String lastLoginIp;
-    
-    
+
+
     // 以下字段不存入数据库
 
-	/**
-	 * 用户头像
-	 */
-	@TableField(exist = false)
-    private List<String> photoList;
-    
     /**
-     * 验证码
+     * 用户头像
      */
-    //@TableField(exist = false)
-    private String validCode;
+    @TableField(exist = false)
+    private String photoUrl;
 
 }
